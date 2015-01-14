@@ -47,19 +47,5 @@ class SineDraw extends JPanel {
 
      
     //Usual application main
-    public static void main( String args[] )
-    { 	
-    	//Instantiates class
-    	SineWave app = new SineWave();
-		//Adds window listener
-        app.addWindowListener(
-        	new WindowAdapter() 
-        	{
-            	public void windowClosing( WindowEvent e )
-            	{
-               		System.exit( 0 );//Closes window
-            	}
-        	}
-     	);
-	} 
+   
 }

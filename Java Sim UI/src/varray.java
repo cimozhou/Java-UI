@@ -34,7 +34,7 @@ class VertexArray {
   int totalsize;
   FloatBuffer plocation;
   FloatBuffer pcolors;
-  final int mapoffsety = 70;
+  final int mapoffsety = 76;
  
   
   Random random = new Random();
@@ -101,11 +101,9 @@ class VertexArray {
     		temppointsData[ i ] = (float)((edage[3]-array[i])/edage[3])*height-mapoffsety;	  
     		  }
       }
-      //pointsData = tools.concatfloat(pointsData, temppointsData);
       for( int i=0; i < colorsets; i++ ){
     	  temcolorsData[ i ] = (float)0.0; 
       }
-      //colorsData = tools.concatfloat(colorsData, temcolorsData);
       points = BufferUtil.newFloatBuffer( size );
       points.put( temppointsData, 0, size );
       points.rewind();
@@ -116,50 +114,9 @@ class VertexArray {
       colorsbuffer.add(colors);
       
 	 }
-	  /*buffoffsetcount= tools.setintarrayoffset(sizearray);
-      // Points.
-	  //totalsize= tools.addintarry(sizearray);
-      points = BufferUtil.newFloatBuffer( totalsize );
-      points.put( pointsData, 0, totalsize );
-      points.rewind();
-      gl.glVertexPointer( 2, GL.GL_FLOAT, 0, points );
-      // Colors.
-      totalcolorsets= tools.addintarry(colorsetsarray);
-      colors = BufferUtil.newFloatBuffer( totalcolorsets );
-      colors.put( colorsData, 0, totalcolorsets );
-      colors.rewind();
-      gl.glColorPointer( 3, GL.GL_FLOAT, 0, colors );*/
     }
 
   //////////////////////// draw /////////////////////////
-  private void initArrayDatatest( GL2 gl,int width,int height)
-  {
-    // Create data points on the surface of a cube.
-    int nbValues = nbPoints * 3;
-    int n2bValues = nbPoints * 2;
-    pointsData = new float[ n2bValues ];
-    colorsData = new float[ nbValues ];
-    for( int i=0; i < nbPoints; i++ )
-    {
-	pointsData[ i ] = (float)Math.random()*width;
-	pointsData[ i+1 ] = (float)Math.random()*height;
-
-	colorsData[ i ] = (float)Math.random();
-	colorsData[ i+1 ] = (float)Math.random();
-	colorsData[ i+2 ] = (float)Math.random();
-    }
-    // Points.
-    points = BufferUtil.newFloatBuffer( n2bValues );
-    points.put( pointsData, 0, n2bValues );
-    points.rewind();
-    
-    gl.glVertexPointer( 2, GL.GL_FLOAT, 0, points );
-    // Colors.
-    colors = BufferUtil.newFloatBuffer( nbValues );
-    colors.put( colorsData, 0, nbValues );
-    colors.rewind();
-    gl.glColorPointer( 3, GL.GL_FLOAT, 0, colors );
-  }
   private void setparticalbuffer(float[] particallocation, float[] particalcolor){
 	  plocation = BufferUtil.newFloatBuffer( particallocation.length );
 	  plocation.put( particallocation, 0, particallocation.length );
@@ -170,27 +127,9 @@ class VertexArray {
 	  pcolors.rewind();
 	  
   }
-  
-  
-  
   public void draw( GL2 gl,float[] particallocation, float[] particalcolor)
     {
 	  gl.glClear(GL.GL_COLOR_BUFFER_BIT);
-
-      // draw a triangle filling the window
-	
-      //gl.glColor3f( 0f, 1f, 0f ); 
-//       gl.glBegin( GL.GL_POINTS ); {
-// 	for( int i=0; i < nbPoints; i++ ) 
-// 	{
-// 	  gl.glVertex3fv( pointsData, i*3 );
-// // 	  gl.glVertex3f( points.get( i*3 ),
-// // 			 points.get( i*3 +1),
-// // 			 points.get( i*3 +2) );
-
-// 	  //gl.glArrayElement( i );
-// 	}      
-//       } gl.glEnd();
 	  for (int i = 0; i < shapecount; i++) { 
 		   if (sizearray[i] > 0) 
 			   gl.glVertexPointer( 2, GL.GL_FLOAT, 0, pointsbuffer.get(i) );
@@ -201,8 +140,6 @@ class VertexArray {
 	   gl.glVertexPointer( 2, GL.GL_FLOAT, 0, plocation );
  	   gl.glColorPointer( 3, GL.GL_FLOAT, 0, pcolors);
 	   gl.glDrawArrays( GL.GL_POINTS, 0, particallocation.length/2  );
-	  
-      //gl.glDrawArrays( GL.GL_LINE_LOOP, 0, totalsize/2  );
       gl.glFlush();
     }
 
