@@ -1,5 +1,6 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +15,8 @@ public class loadpartical {
 	final int stepcount =3870;
 	float [] pointsData;
 	float [] colorData;
- 
+	List<double[][]> arraylist;
+	
 	
 	public  float[] getpointlist(int width,int height, int step,List<Map<String, MLArray>> allpointset,float []edage) {
 		pointsData = new float[ partcialcount*2 ];
@@ -42,6 +44,32 @@ public class loadpartical {
 		
 		
 		return pointsData;
+	}
+	public  float[] getcurrentpointlist(int width,int height, int step, List<double[][]> arrayliest,float []edage){
+		pointsData = new float[ partcialcount*2 ];
+		double[][] xvalues =arrayliest.get(0);
+		double[][] yvalues =arrayliest.get(1);
+		for( int i=0; i < partcialcount*2; i++ )
+	    {
+			if ( (i & 1) == 0 ) { 
+				pointsData[ i ] = (float)((xvalues[step][i/2]-edage[0])/edage[1])*width;
+	    		  } else {   
+	    	    pointsData[ i ] = (float)((yvalues[step][i/2]-edage[2])/edage[3])*height;	  
+	    		  }
+	    }
+		return pointsData;
+	}
+	public  List<double[][]> getallpointset(List<Map<String, MLArray>> allpointset){
+		List<double[][]> arrayliest = new ArrayList<double[][]>();
+		MLDouble mlarryx = (MLDouble) allpointset.get(0).get("xvalues");
+		double[][] xvalues =mlarryx.getArray();
+		
+		MLDouble mlarryy = (MLDouble) allpointset.get(1).get("yvalues");
+		double[][] yvalues =mlarryy.getArray();
+		arrayliest.add(xvalues);
+		arrayliest.add(yvalues);
+		return arrayliest;
+		
 	}
 	public  float[] getpointcolorlist() {
 		colorData = new float[ partcialcount*3 ];

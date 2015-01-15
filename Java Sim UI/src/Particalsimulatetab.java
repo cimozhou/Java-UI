@@ -37,16 +37,19 @@ public class Particalsimulatetab{
     List<Map<String, MLArray>> allpointset;
 	int mapszie;
 	List<float[]> map;
+	List<double[][]> arraylist;
 	float[] boundlist;
 	private static final int boundentry = 4;
 	private static final int startingstep = 1;
 	private static final int defulautset = 5;
     int stepcount;
-    int stepintervel;
+    double invercount;
+    double stepintervel;
     boolean enableplayer = false;
 	public Particalsimulatetab(int panelW, int panelH) {
     	stepintervel =defulautset;
     	stepcount=startingstep; //set the starting step
+    	invercount= (double)startingstep;
     	threads = new ArrayList<LoadMat>();
 		loadpartical currentset = new loadpartical();
 	    this.mainpanel = new JPanel(new BorderLayout());
@@ -66,6 +69,8 @@ public class Particalsimulatetab{
 				e1.printStackTrace();
 			}
 		  }
+		arraylist  = new ArrayList<double[][]>();
+		arraylist = currentset.getallpointset(allpointset);
 	 JSlider adjuststep = new JSlider(startingstep, currentset.getstep(), startingstep);
 	    Loadmap mymap= new Loadmap(); //load map
 		map=  new ArrayList<float[]>();
@@ -102,7 +107,8 @@ public class Particalsimulatetab{
         	if (enableplayer ==true){
         		if (stepcount < currentset.getstep()){
         			adjuststep.setValue(stepcount);
-        			stepcount=stepcount+stepintervel;
+        			invercount = invercount+stepintervel;
+        			stepcount=(int) invercount;
         			
         		}else{
         			if (animator.isAnimating()){
@@ -111,7 +117,7 @@ public class Particalsimulatetab{
         		}
         	}
         	if (stepcount < currentset.getstep()){
-        		teststuff.draw(glautodrawable.getGL().getGL2(),currentset.getpointlist(glcanvas.getWidth(), glcanvas.getHeight(),stepcount,allpointset,boundlist),currentset.getpointcolorlist());
+        		teststuff.draw(glautodrawable.getGL().getGL2(),currentset.getcurrentpointlist(glcanvas.getWidth(), glcanvas.getHeight(),stepcount,arraylist,boundlist),currentset.getpointcolorlist());
         	}
         	}
     });
@@ -119,6 +125,7 @@ public class Particalsimulatetab{
 		  public void stateChanged(ChangeEvent e) {
 			  if (enableplayer ==false){
 			  stepcount= ((JSlider) e.getSource()).getValue();
+			  invercount =(double)stepcount;
 			  glcanvas.display();
 			  }
 				//sines.setCycles(((JSlider) e.getSource()).getValue());
@@ -133,25 +140,26 @@ public class Particalsimulatetab{
 	}
     private void showCombobox(JPanel parentpanel,  Animator animator,GLCanvas glcanvas,JSlider adjuststep){                                    
 	      final DefaultComboBoxModel setpcount = new DefaultComboBoxModel();
-	      setpcount.addElement(5);
-	      setpcount.addElement(10);
-	      setpcount.addElement(20);
-	      setpcount.addElement(50);
-	      setpcount.addElement(100);
-
+	      setpcount.addElement((double)0.01);
+	      setpcount.addElement((double)0.02);
+	      setpcount.addElement((double)0.04);
+	      setpcount.addElement((double)0.06);
+	      setpcount.addElement((double)0.1);
+	      setpcount.addElement((double)1);
 	      final JComboBox setCombo = new JComboBox(setpcount);    
-	      setCombo.setSelectedIndex(0);
+	      setCombo.setSelectedIndex(4);
 	      ;
 	      JScrollPane setListScrollPane = new JScrollPane(setCombo);    
 	      JButton Runsimulator = new JButton("Runsimulator");
 	      Runsimulator.addActionListener(new ActionListener() {
 	         public void actionPerformed(ActionEvent e) { 
-	            int data = 5;
+	        	 double data = (double)0.1;
 	            if (setCombo.getSelectedIndex() != -1) {                     
-	               data = (int) setCombo.getItemAt
+	               data = (double) setCombo.getItemAt
 	                    (setCombo.getSelectedIndex());          
 	            } 
-	            stepcount=1;
+	            //invercount=(double)1;
+	            //stepcount=1;
 	            glcanvas.display();
 	            stepintervel= data;
 	            enableplayer = true;
@@ -164,9 +172,10 @@ public class Particalsimulatetab{
 		         public void actionPerformed(ActionEvent e) { 
 		        	 animator.stop();
 		        	 enableplayer = false;
+		        	 invercount=(double)1;
 		        	 stepcount=1;
 		        	 glcanvas.display();
-		        	 stepintervel =5;
+		        	 stepintervel =(double)0.1;
 		        	 setCombo.setSelectedIndex(0);
 		        	 adjuststep.setValue(1);
 		         }});
