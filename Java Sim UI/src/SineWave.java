@@ -54,8 +54,8 @@ public class SineWave extends JFrame //Inherits JFrame class
 	private static final int panelW= 1100;
 	private static final int panelH = 700;
     int stepcount;
-    private static final String mathPathx = "D:\\study\\2014-2015\\4zp6\\py sim\\xvalues.mat";
-    private static final String mathPathy = "D:\\study\\2014-2015\\4zp6\\py sim\\yvalues.mat";
+    private static final String mathPathx = "src/xvalues.mat";
+    private static final String mathPathy = "src/yvalues.mat";
     List<LoadMat> threads;
     List<Map<String, MLArray>> allpointset;
 	//List<VertexArray> shapelist;

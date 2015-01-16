@@ -10,7 +10,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 public class Loadmap {
-private static final String filePath = "D:\\study\\2014-2015\\4zp6\\py sim\\ITB-F2.json";
+private static final String filePath = "src/ITB-F2.json";
 private static final int offset = 1;
 JSONObject jsonObject;
 	public  List<float[]> getmap() {
