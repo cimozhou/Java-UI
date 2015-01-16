@@ -67,7 +67,7 @@ class VertexArray {
   ///////////////// create data ///////////////////////
 
 
-  private void initArrayData( GL2 gl,int width,int height,List<float[]> arrayset, float[] edage )
+  private void initArrayData( GL2 gl,int width,int height,List<float[]> arrayset, float[] edge )
     {
       // Create data points on the surface of a cube.
 	  shapecount= arrayset.size();
@@ -95,10 +95,10 @@ class VertexArray {
       {
     	  
     	  if ( (i & 1) == 0 ) { 
-    		  temppointsData[ i ] = (float)((array[i]-edage[0])/edage[1])*width;
+    		  temppointsData[ i ] = (float)((array[i]-edge[0])/edge[1])*width;
     		  } else { 
     			  
-    		temppointsData[ i ] = (float)((edage[3]-array[i])/edage[3])*height-mapoffsety;	  
+    		temppointsData[ i ] = (float)((edge[3]-array[i])/edge[3])*height-mapoffsety;	  
     		  }
       }
       for( int i=0; i < colorsets; i++ ){
@@ -117,16 +117,7 @@ class VertexArray {
     }
 
   //////////////////////// draw /////////////////////////
-  private void setparticalbuffer(float[] particallocation, float[] particalcolor){
-	  plocation = BufferUtil.newFloatBuffer( particallocation.length );
-	  plocation.put( particallocation, 0, particallocation.length );
-	  plocation.rewind();
-	    // Colors.
-	  pcolors = BufferUtil.newFloatBuffer( particalcolor.length );
-	  pcolors.put( particalcolor, 0, particalcolor.length );
-	  pcolors.rewind();
-	  
-  }
+
   public void draw( GL2 gl,float[] particallocation, float[] particalcolor)
     {
 	  gl.glClear(GL.GL_COLOR_BUFFER_BIT);
@@ -143,4 +134,15 @@ class VertexArray {
       gl.glFlush();
     }
 
+
+private void setparticalbuffer(float[] particallocation, float[] particalcolor){
+	  plocation = BufferUtil.newFloatBuffer( particallocation.length );
+	  plocation.put( particallocation, 0, particallocation.length );
+	  plocation.rewind();
+	    // Colors.
+	  pcolors = BufferUtil.newFloatBuffer( particalcolor.length );
+	  pcolors.put( particalcolor, 0, particalcolor.length );
+	  pcolors.rewind();
+	  
+}
 }
