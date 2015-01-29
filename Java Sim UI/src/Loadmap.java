@@ -9,25 +9,26 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-public class Loadmap {
-private static final String filePath = "src/ITB-F2.json";
+public class LoadMap {
+private static final String filePath = "ITB-F2.json";
 private static final int offset = 1;
 JSONObject jsonObject;
-	public  List<float[]> getmap() {
+	public  List<float[]> getMap() {
 		List<float[]> maplist = new ArrayList<float[]>();  
 		try {
 			// read the json file
+			//FileReader r = new FileReader(main.class.getClassLoader().getResource(filePath).getPath().replaceAll("%20", " "));
 			FileReader reader = new FileReader(filePath);
 
 			JSONParser jsonParser = new JSONParser();
-			 jsonObject =  (JSONObject) jsonParser.parse(reader);
+			JSONObject map =  (JSONObject) jsonParser.parse(reader);
 
 			// get an array from the JSON object
-			JSONObject map = (JSONObject) jsonObject.get("map");
-			maplist.add(loadarrayfromjson(map,"outer"));
+			//JSONObject map = (JSONObject) jsonObject.get("map");
+			maplist.add(tools.loadArrayFromJson(map,"outer"));
 			for(int i=1; i<(map.size()); i++){
 				if ((JSONArray) map.get("intEdge"+Integer.toString(i))!=null){
-					maplist.add(loadarrayfromjson(map,"intEdge"+Integer.toString(i)));
+					maplist.add(tools.loadArrayFromJson(map,"intEdge"+Integer.toString(i)));
 				}
 			}
 			// take the elements of the json array	
@@ -46,16 +47,16 @@ JSONObject jsonObject;
 		}
 		return maplist;
 	}
-	public  float[] getbound() {
+	public  float[] getBound() {
 		float[] boundlist = new float[4];  
 		try {
 			FileReader reader = new FileReader(filePath);
 			JSONParser jsonParser = new JSONParser();
-			 jsonObject =  (JSONObject) jsonParser.parse(reader);
+			JSONObject map  =  (JSONObject) jsonParser.parse(reader);
 
 			// get an array from the JSON object
-			JSONObject map = (JSONObject) jsonObject.get("map");
-			boundlist=loadarrayfromjson(map,"size");	
+			//JSONObject map = (JSONObject) jsonObject.get("map");
+			boundlist=tools.loadArrayFromJson(map,"size");	
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -67,30 +68,4 @@ JSONObject jsonObject;
 		// get an array from the JSON object
 		return boundlist;
 	}
-	public static  float[] loadarrayfromjson(JSONObject map,String index){
-		List<Float> list = new ArrayList<Float>();    
-		JSONArray inter= (JSONArray) map.get(index);
-		for(int i=0; i<inter.size(); i++){
-			//System.out.println("The " + i + " element of the map: "+inter.get(i));
-		}
-		Iterator i = inter.iterator();
-		while (i.hasNext()) {
-			JSONArray innerObj = (JSONArray) i.next();
-			// take the elements of the json array
-			for(int j=0; j<innerObj.size(); j++){
-				list.add(Float.parseFloat(innerObj.get(j).toString()));
-				//System.out.println("The " + i + " element of the vetx: "+innerObj.get(j));
-				Iterator vetex = innerObj.iterator();
-			}
-			
-			
-		}
-		float[] floatArray = new float[list.size()];
-		int t = 0;
-		for (Float f : list) {
-		    floatArray[t++] = (f != null ? f : Float.NaN); // Or whatever default you want.
-		}
-		return floatArray;
-	}
-
 }

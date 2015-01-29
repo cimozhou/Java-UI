@@ -2,7 +2,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Frame;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -40,16 +42,25 @@ import com.jmatio.types.MLArray;
 import com.jogamp.opengl.util.Animator;
 import com.jogamp.opengl.util.FPSAnimator;
 
-public class Maininterface extends JFrame //Inherits JFrame class
+public class MainInterface extends JFrame //Inherits JFrame class
 {
-	private static final int windowsW= 1200;
-	private static final int windowsH = 800;
-	private static final int panelW= 1100;
-	private static final int panelH = 700;
-
-    public Maininterface() 
+	//private static final int windowsW= 1200;
+	//private static final int windowsH = 800;
+	//private static final int panelW= 1100;
+	//private static final int panelH = 700;
+	List<float[]> map;
+	float[] boundlist;
+	private static final int boundentry = 4;
+	private static final int boarder = 50;
+	private static final int boarderinter = 120;
+	private int windowsW;
+	private int windowsH;
+    public MainInterface() 
     {
     	super ("Java simulator");//Adds a title
+    	windowsW = Toolkit.getDefaultToolkit().getScreenSize().width;
+    	windowsH = Toolkit.getDefaultToolkit().getScreenSize().height;
+    	
 	    getContentPane().setLayout(new FlowLayout());//Sets layout
 	    getContentPane().setBackground( Color.black );//Sets background
       	
@@ -61,7 +72,8 @@ public class Maininterface extends JFrame //Inherits JFrame class
 		SineDraw sines = new SineDraw();
 		JSlider adjustCycles = new JSlider(1, 30, 5);
 		JPanel panelLogIn = new JPanel(new BorderLayout());
-    	panelLogIn.setPreferredSize(new Dimension(panelW, panelH));
+    	//panelLogIn.setPreferredSize(new Dimension(panelW, panelH));
+		panelLogIn.setSize(windowsW-boarder, windowsH-boarderinter);
     	panelLogIn.setBorder(BorderFactory.createLineBorder( Color.orange.darker() ));
     	panelLogIn.setBackground( Color.orange );
 		panelLogIn.add(sines);
@@ -70,22 +82,37 @@ public class Maininterface extends JFrame //Inherits JFrame class
 			sines.setCycles(((JSlider) e.getSource()).getValue());
 		  }
 		});
-		panelLogIn.add(adjustCycles, BorderLayout.SOUTH);   
-	    Particalsimulatetab test1 = new Particalsimulatetab(panelW, panelH);
+		panelLogIn.add(adjustCycles, BorderLayout.SOUTH); 
+		
+		LoadMap mymap= new LoadMap(); //load map
+		map=  new ArrayList<float[]>();
+		map=mymap.getMap();
+		boundlist = new float[boundentry];
+		boundlist=mymap.getBound();
+		
+		ParticalSimulateTab p1 = new ParticalSimulateTab(windowsW-boarder, windowsH-boarderinter,map,boundlist);
+		LightSimulateTab p2 = new LightSimulateTab(windowsW-boarder, windowsH-boarderinter,map,boundlist);
 		JTabbedPane tabbedPane = new JTabbedPane();
 		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		tabbedPane.addTab("Tab 1", null, panelLogIn,
                 "Does nothing");
         tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
          
-        tabbedPane.addTab("Tab 2", null, test1.getpanel(),
-                "Does twice as much nothing");
+        tabbedPane.addTab("Tab 2", null, p1.getpanel(),
+                "Particalsim");
+        tabbedPane.addTab("Tab 3", null, p2.getpanel(),
+                "Lightsim");
         tabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
         tabbedPane.setBackground(Color.white);
-        tabbedPane.setBackgroundAt(1, Color.white);
-        tabbedPane.setBackgroundAt(0, Color.white);
+        //tabbedPane.setBackgroundAt(1, Color.white);
+        //tabbedPane.setBackgroundAt(0, Color.white);
+        tabbedPane.setSize(windowsW-boarder, windowsH-boarder);
 		getContentPane().add (tabbedPane);
-    	setSize( windowsW, windowsH );
+		setSize(windowsW, windowsH-boarder);
+		
+		//setExtendedState(Frame.MAXIMIZED_BOTH);
+		
+    	//setSize( windowsW, windowsH );
     	this.setLocationRelativeTo(null);
 		this.setVisible(true);
     }

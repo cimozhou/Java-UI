@@ -34,8 +34,9 @@ class VertexArray {
   int totalsize;
   FloatBuffer plocation;
   FloatBuffer pcolors;
-  final int mapoffsety = 76;
- 
+  final int mapoffsety = 0;
+  final int circlesegment= 100; 
+  final int circlesize= 5; 
   
   Random random = new Random();
 
@@ -118,7 +119,7 @@ class VertexArray {
 
   //////////////////////// draw /////////////////////////
 
-  public void draw( GL2 gl,float[] particallocation, float[] particalcolor)
+  public void drawwithparticle( GL2 gl,float[] particallocation, float[] particalcolor)
     {
 	  gl.glClear(GL.GL_COLOR_BUFFER_BIT);
 	  for (int i = 0; i < shapecount; i++) { 
@@ -127,15 +128,28 @@ class VertexArray {
 		   		gl.glColorPointer( 3, GL.GL_FLOAT, 0, colorsbuffer.get(i));
 			   gl.glDrawArrays( GL.GL_LINE_LOOP, 0, sizearray[i]/2  );
 		}
-	  setparticalbuffer(particallocation,particalcolor);
+	  setParticalBuffer(particallocation,particalcolor);
 	   gl.glVertexPointer( 2, GL.GL_FLOAT, 0, plocation );
  	   gl.glColorPointer( 3, GL.GL_FLOAT, 0, pcolors);
 	   gl.glDrawArrays( GL.GL_POINTS, 0, particallocation.length/2  );
       gl.glFlush();
     }
+  public void drawwithlight( GL2 gl,List<float[]> lightvertexlist, List<float[]> lightcolorlist)
+  {
+	  gl.glClear(GL.GL_COLOR_BUFFER_BIT);
+	  for (int i = 0; i < shapecount; i++) { 
+		   if (sizearray[i] > 0) 
+			   gl.glVertexPointer( 2, GL.GL_FLOAT, 0, pointsbuffer.get(i) );
+		   		gl.glColorPointer( 3, GL.GL_FLOAT, 0, colorsbuffer.get(i));
+			   gl.glDrawArrays( GL.GL_LINE_LOOP, 0, sizearray[i]/2  );
+		}
+	  for(int ii = 0; ii < lightvertexlist.size(); ii++) {
+	  DrawCircle(gl,lightcolorlist.get(ii),lightvertexlist.get(ii)[0], lightvertexlist.get(ii)[1],circlesize,circlesegment);
+	  }
+    gl.glFlush();
+  }
 
-
-private void setparticalbuffer(float[] particallocation, float[] particalcolor){
+private void setParticalBuffer(float[] particallocation, float[] particalcolor){
 	  plocation = BufferUtil.newFloatBuffer( particallocation.length );
 	  plocation.put( particallocation, 0, particallocation.length );
 	  plocation.rewind();
@@ -144,5 +158,32 @@ private void setparticalbuffer(float[] particallocation, float[] particalcolor){
 	  pcolors.put( particalcolor, 0, particalcolor.length );
 	  pcolors.rewind();
 	  
+}
+
+
+
+
+
+private void DrawCircle(GL2 gl, float[] innerColor,float cx, float cy, float r, int num_segments) 
+{ 
+	float theta = (float) (2 * 3.1415926 / (float)num_segments); 
+	float c = (float) Math.cos(theta);//precalculate the sine and cosine
+	float s = (float) Math.sin(theta);
+	float t;
+	float x = r;//we start at angle = 0 
+	float y = 0; 
+	gl.glBegin(GL.GL_TRIANGLE_FAN);
+	gl.glColor3fv(innerColor,0 );
+	for(int ii = 0; ii < num_segments; ii++) 
+	{ 
+		
+		gl.glVertex2f(x + cx, y + cy);//output vertex 
+        
+		//apply the rotation matrix
+		t = x;
+		x = c * x - s * y;
+		y = s * t + c * y;
+	} 
+	gl.glEnd(); 
 }
 }

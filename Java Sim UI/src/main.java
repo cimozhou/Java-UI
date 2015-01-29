@@ -6,7 +6,8 @@ public class main {
 	 public static void main( String args[] )
 	    { 	
 	    	//Instantiates class
-	    	Maininterface app = new Maininterface();
+		 	//MainInterface app = new MainInterface();
+		 	Config app = new Config();
 			//Adds window listener
 	        app.addWindowListener(
 	        	new WindowAdapter() 

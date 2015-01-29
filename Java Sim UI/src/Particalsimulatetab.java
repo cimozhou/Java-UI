@@ -29,16 +29,16 @@ import com.jmatio.types.MLArray;
 import com.jogamp.opengl.util.Animator;
 
 
-public class Particalsimulatetab{
+public class ParticalSimulateTab{
 	private  final JPanel mainpanel;
-    private static final String mathPathx = "src/xvalues.mat";
-    private static final String mathPathy = "src/yvalues.mat";
+    private static final String mathPathx = "xvalues.mat";
+    private static final String mathPathy = "yvalues.mat";
     List<LoadMat> threads;
     List<Map<String, MLArray>> allpointset;
 	int mapszie;
-	List<float[]> map;
+	//List<float[]> map;
 	List<double[][]> arraylist;
-	float[] boundlist;
+	//float[] boundlist;
 	private static final int boundentry = 4;
 	private static final int startingstep = 1;
 	private static final int defulautset = 5;
@@ -46,12 +46,12 @@ public class Particalsimulatetab{
     double invercount;
     double stepintervel;
     boolean enableplayer = false;
-	public Particalsimulatetab(int panelW, int panelH) {
+	public ParticalSimulateTab(int panelW, int panelH, List<float[]> map,float[] boundlist) {
     	stepintervel =defulautset;
     	stepcount=startingstep; //set the starting step
     	invercount= (double)startingstep;
     	threads = new ArrayList<LoadMat>();
-		loadpartical currentset = new loadpartical();
+    	LoadParticle currentset = new LoadParticle();
 	    this.mainpanel = new JPanel(new BorderLayout());
 	    this.mainpanel.setPreferredSize(new Dimension(panelW, panelH));
 	    threads.add(new LoadMat(mathPathx));
@@ -70,13 +70,13 @@ public class Particalsimulatetab{
 			}
 		  }
 		arraylist  = new ArrayList<double[][]>();
-		arraylist = currentset.getallpointset(allpointset);
-	 JSlider adjuststep = new JSlider(startingstep, currentset.getstep(), startingstep);
-	    Loadmap mymap= new Loadmap(); //load map
+		arraylist = currentset.getAllPointset(allpointset);
+	 JSlider adjuststep = new JSlider(startingstep, currentset.getStep(), startingstep);
+	 /*LoadMap mymap= new LoadMap(); //load map
 		map=  new ArrayList<float[]>();
-		map=mymap.getmap();
+		map=mymap.getMap();
 		boundlist = new float[boundentry];
-		boundlist=mymap.getbound();
+		boundlist=mymap.getBound();*/
 		mapszie= map.size();
 	  
 	GLProfile glprofile = GLProfile.getDefault();
@@ -105,7 +105,7 @@ public class Particalsimulatetab{
         	//render(glautodrawable);
         	
         	if (enableplayer ==true){
-        		if (stepcount < currentset.getstep()){
+        		if (stepcount < currentset.getStep()){
         			adjuststep.setValue(stepcount);
         			invercount = invercount+stepintervel;
         			stepcount=(int) invercount;
@@ -116,8 +116,8 @@ public class Particalsimulatetab{
         			}
         		}
         	}
-        	if (stepcount < currentset.getstep()){
-        		teststuff.draw(glautodrawable.getGL().getGL2(),currentset.getcurrentpointlist(glcanvas.getWidth(), glcanvas.getHeight(),stepcount,arraylist,boundlist),currentset.getpointcolorlist());
+        	if (stepcount < currentset.getStep()){
+        		teststuff.drawwithparticle(glautodrawable.getGL().getGL2(),currentset.getCurrentPointList(glcanvas.getWidth(), glcanvas.getHeight(),stepcount,arraylist,boundlist),currentset.getPointColorlist());
         	}
         	}
     });
